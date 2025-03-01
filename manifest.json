@@ -5,9 +5,9 @@
   "description": "Automatic subtitle translation using Google Gemini AI",
   "logo": "https://i.imgur.com/cQR8EK2.png",
   "resources": ["subtitles"],
-  "types": ["movie", "series"],
+  "types": ["movie", "series", "channel", "tv"],
   "catalogs": [],
-  "idPrefixes": ["tt", "kitsu"],
+  "idPrefixes": ["tt", "kitsu", "tmdb", "anilist", "douban", "hulu", "mlb", "nba", "nfl", "nhl", "crunchyroll", ""],
   "background": "https://i.imgur.com/cQR8EK2.png",
   "contactEmail": "example@example.com"
 }

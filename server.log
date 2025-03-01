@@ -82,3 +82,18 @@
 [2025-03-01T19:27:28.373Z] GET /subtitles/movie/tt32221196/filename=One.Of.Them.Days.2025.2160p.4K.WEB.x265.10bit.AAC5.1-%5BYTS.MX%5D.mkv&videoSize=4657325343&videoHash=b018e9d9cbb8761c.json 404 4ms
 [2025-03-01T19:27:51.499Z] GET /subtitles/movie/tt13654226/filename=The.Gorge.2025.Hybrid.2160p.WEB-DL.DV.HDR.DDP5.1.Atmos.H265-AOC.mkv&videoSize=23466159630&videoHash=f5e4ef8485d8e2c6.json
 [2025-03-01T19:27:51.499Z] GET /subtitles/movie/tt13654226/filename=The.Gorge.2025.Hybrid.2160p.WEB-DL.DV.HDR.DDP5.1.Atmos.H265-AOC.mkv&videoSize=23466159630&videoHash=f5e4ef8485d8e2c6.json 404 2ms
+[2025-03-01T19:41:26.698Z] Addon interface loaded successfully
+[2025-03-01T19:41:26.701Z] Server started on port 7000
+[2025-03-01T19:41:26.701Z] Gemini API key configured: Yes
+[2025-03-01T19:41:26.701Z] OpenSubtitles API key configured: Yes
+[2025-03-01T19:41:26.702Z] Add-on URL: http://localhost:7000/manifest.json
+[2025-03-01T19:41:37.559Z] GET /debug.html
+[2025-03-01T19:41:37.559Z] GET /debug.html 304 5ms
+[2025-03-01T19:41:39.978Z] POST /debug/translate-text
+[2025-03-01T19:41:39.978Z] POST /translate-text 200 1947ms
+[2025-03-01T19:41:44.055Z] GET /debug/check-api-keys
+[2025-03-01T19:41:44.055Z] GET /check-api-keys 304 1886ms
+[2025-03-01T19:42:11.136Z] GET /manifest.json
+[2025-03-01T19:42:11.136Z] GET /manifest.json 304 3ms
+[2025-03-01T19:42:24.865Z] GET /subtitles/movie/tt32221196/filename=One.Of.Them.Days.2025.2160p.4K.WEB.x265.10bit.AAC5.1-%5BYTS.MX%5D.mkv&videoSize=4657325343&videoHash=b018e9d9cbb8761c.json
+[2025-03-01T19:42:24.865Z] GET /subtitles/movie/tt32221196/filename=One.Of.Them.Days.2025.2160p.4K.WEB.x265.10bit.AAC5.1-%5BYTS.MX%5D.mkv&videoSize=4657325343&videoHash=b018e9d9cbb8761c.json 404 3ms

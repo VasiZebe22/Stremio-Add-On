@@ -1,0 +1,13 @@
+{
+  "id": "org.subtitofree",
+  "version": "1.0.0",
+  "name": "Subtito Free",
+  "description": "Automatic subtitle translation using Google Gemini AI",
+  "logo": "https://i.imgur.com/cQR8EK2.png",
+  "resources": ["subtitles"],
+  "types": ["movie", "series"],
+  "catalogs": [],
+  "idPrefixes": ["tt", "kitsu"],
+  "background": "https://i.imgur.com/cQR8EK2.png",
+  "contactEmail": "example@example.com"
+}

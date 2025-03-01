@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subtitle Add-on Debug</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      padding: 20px;
+    }
+    .card {
+      background-color: #2d2d2d;
+      border-color: #444;
+      margin-bottom: 20px;
+    }
+    .card-header {
+      background-color: #3c3c3c;
+      border-color: #444;
+    }
+    pre {
+      background-color: #252525;
+      color: #e0e0e0;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .form-control {
+      background-color: #333;
+      border-color: #444;
+      color: #e0e0e0;
+    }
+    .form-control:focus {
+      background-color: #3a3a3a;
+      color: #fff;
+    }
+    .btn-primary {
+      background-color: #2d5986;
+      border-color: #2d5986;
+    }
+    .btn-primary:hover {
+      background-color: #366eaa;
+      border-color: #366eaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="mb-4">Subtitle Add-on Debug Tools</h1>
+    
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Test Direct Translation</h5>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="translateText">Text to translate:</label>
+          <textarea id="translateText" class="form-control" rows="3">Hello, this is a test subtitle. How are you today?</textarea>
+        </div>
+        <div class="form-row">
+          <div class="col-md-4 mb-3">
+            <label for="fromLang">From Language:</label>
+            <select id="fromLang" class="form-control">
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="it">Italian</option>
+            </select>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label for="toLang">To Language:</label>
+            <select id="toLang" class="form-control">
+              <option value="el">Greek</option>
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+            </select>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label>&nbsp;</label>
+            <button id="testTranslateBtn" class="btn btn-primary form-control">Test Translation</button>
+          </div>
+        </div>
+        <div id="translationResult" class="mt-3" style="display: none;">
+          <h6>Translation Result:</h6>
+          <div id="translatedText" class="mt-2"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Test Subtitle Translation</h5>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="subtitleUrl">Subtitle URL:</label>
+          <input type="text" id="subtitleUrl" class="form-control" placeholder="https://example.com/subtitle.srt">
+        </div>
+        <div class="form-row">
+          <div class="col-md-6 mb-3">
+            <label for="subtitleToLang">Target Language:</label>
+            <select id="subtitleToLang" class="form-control">
+              <option value="el">Greek</option>
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>&nbsp;</label>
+            <button id="testSubtitleBtn" class="btn btn-primary form-control">Test Subtitle Translation</button>
+          </div>
+        </div>
+        <div id="subtitleResult" class="mt-3" style="display: none;">
+          <h6>Translated Subtitle:</h6>
+          <pre id="translatedSubtitle" style="max-height: 300px; overflow-y: auto;"></pre>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Check API Keys</h5>
+      </div>
+      <div class="card-body">
+        <button id="checkApiKeysBtn" class="btn btn-primary">Check API Keys</button>
+        <button id="testGeminiApiBtn" class="btn btn-info ml-2">Test Gemini API Directly</button>
+        <div id="apiKeyStatus" class="mt-3" style="display: none;"></div>
+        <div id="geminiApiTestResult" class="mt-3" style="display: none;"></div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Test Dummy VTT File</h5>
+      </div>
+      <div class="card-body">
+        <p>Click the button below to view the dummy VTT file content:</p>
+        <button id="testDummyVttBtn" class="btn btn-primary">View Dummy VTT</button>
+        <div id="dummyVttResult" class="mt-3" style="display: none;">
+          <h6>Dummy VTT Content:</h6>
+          <pre id="dummyVttContent" style="max-height: 300px; overflow-y: auto;"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Test direct translation
+      document.getElementById('testTranslateBtn').addEventListener('click', function() {
+        const text = document.getElementById('translateText').value;
+        const fromLang = document.getElementById('fromLang').value;
+        const toLang = document.getElementById('toLang').value;
+        
+        if (!text) {
+          alert('Please enter text to translate');
+          return;
+        }
+        
+        // Show loading state
+        document.getElementById('translationResult').style.display = 'block';
+        document.getElementById('translatedText').innerHTML = 'Translating...';
+        
+        // Call the debug endpoint with POST method
+        fetch('/debug/translate-text', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            text: text,
+            from: fromLang,
+            to: toLang
+          })
+        })
+          .then(response => {
+            console.log('Response status:', response.status);
+            
+            if (!response.ok) {
+              return response.text().then(text => {
+                console.error('Error response body:', text);
+                throw new Error(`Request failed with status code ${response.status}`);
+              });
+            }
+            
+            return response.json();
+          })
+          .then(data => {
+            if (data.error) {
+              document.getElementById('translatedText').innerHTML = `<div class="alert alert-danger">Error: ${data.error}</div>`;
+            } else {
+              document.getElementById('translatedText').innerHTML = `
+                <div class="mb-2"><strong>Original (${data.original.lang}):</strong> ${data.original.text}</div>
+                <div><strong>Translated (${data.translated.lang}):</strong> ${data.translated.text}</div>
+              `;
+            }
+          })
+          .catch(error => {
+            console.error('Translation error:', error);
+            document.getElementById('translatedText').innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+          });
+      });
+      
+      // Test subtitle translation
+      document.getElementById('testSubtitleBtn').addEventListener('click', function() {
+        const url = document.getElementById('subtitleUrl').value;
+        const toLang = document.getElementById('subtitleToLang').value;
+        
+        if (!url) {
+          alert('Please enter a subtitle URL');
+          return;
+        }
+        
+        // Show loading state
+        document.getElementById('subtitleResult').style.display = 'block';
+        document.getElementById('translatedSubtitle').textContent = 'Translating subtitle...';
+        
+        // Call the debug endpoint
+        fetch(`/debug/translate-subtitle?url=${encodeURIComponent(url)}&to=${toLang}`)
+          .then(response => {
+            if (!response.ok) {
+              return response.json().then(data => {
+                throw new Error(data.error || 'Failed to translate subtitle');
+              });
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('translatedSubtitle').textContent = data;
+          })
+          .catch(error => {
+            document.getElementById('translatedSubtitle').innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+          });
+      });
+      
+      // Check API keys
+      document.getElementById('checkApiKeysBtn').addEventListener('click', function() {
+        // Show loading state
+        document.getElementById('apiKeyStatus').style.display = 'block';
+        document.getElementById('apiKeyStatus').innerHTML = 'Checking API keys...';
+        
+        // Call the API key check endpoint
+        fetch('/debug/check-api-keys')
+          .then(response => response.json())
+          .then(data => {
+            let html = '<ul class="list-group">';
+            
+            for (const [key, status] of Object.entries(data)) {
+              const statusClass = status.valid ? 'list-group-item-success' : 'list-group-item-danger';
+              const statusIcon = status.valid ? '✅' : '❌';
+              
+              html += `<li class="list-group-item ${statusClass}">
+                <strong>${key}:</strong> ${statusIcon} ${status.message}
+              </li>`;
+            }
+            
+            html += '</ul>';
+            document.getElementById('apiKeyStatus').innerHTML = html;
+          })
+          .catch(error => {
+            document.getElementById('apiKeyStatus').innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+          });
+      });
+      
+      // Test Gemini API directly
+      document.getElementById('testGeminiApiBtn').addEventListener('click', function() {
+        // Show loading state
+        document.getElementById('geminiApiTestResult').style.display = 'block';
+        document.getElementById('geminiApiTestResult').innerHTML = '<div class="alert alert-info">Testing Gemini API connection...</div>';
+        
+        // Call the API test endpoint
+        fetch('/debug/test-gemini-api')
+          .then(response => {
+            console.log('Gemini API test response status:', response.status);
+            
+            if (!response.ok) {
+              return response.json().then(data => {
+                console.error('Gemini API test error:', data);
+                throw new Error(`API test failed with status ${response.status}: ${data.error || 'Unknown error'}`);
+              });
+            }
+            
+            return response.json();
+          })
+          .then(data => {
+            console.log('Gemini API test result:', data);
+            
+            if (data.status === 'success') {
+              let html = `<div class="alert alert-success">
+                <h6>✅ Gemini API is working correctly!</h6>
+                <p><strong>Test response:</strong> ${data.testResponse}</p>
+                <p><strong>Available models:</strong></p>
+                <ul>`;
+              
+              data.models.forEach(model => {
+                html += `<li>${model}</li>`;
+              });
+              
+              html += `</ul>
+              </div>`;
+              
+              document.getElementById('geminiApiTestResult').innerHTML = html;
+            } else {
+              document.getElementById('geminiApiTestResult').innerHTML = `
+                <div class="alert alert-danger">
+                  <h6>❌ Gemini API test failed</h6>
+                  <p><strong>Error:</strong> ${data.error}</p>
+                  ${data.responseData ? `<p><strong>Response data:</strong> <pre>${JSON.stringify(data.responseData, null, 2)}</pre></p>` : ''}
+                </div>`;
+            }
+          })
+          .catch(error => {
+            console.error('Error testing Gemini API:', error);
+            document.getElementById('geminiApiTestResult').innerHTML = `
+              <div class="alert alert-danger">
+                <h6>❌ Error testing Gemini API</h6>
+                <p>${error.message}</p>
+              </div>`;
+          });
+      });
+      
+      // Test dummy VTT file
+      document.getElementById('testDummyVttBtn').addEventListener('click', function() {
+        // Show loading state
+        document.getElementById('dummyVttResult').style.display = 'block';
+        document.getElementById('dummyVttContent').textContent = 'Loading dummy VTT file...';
+        
+        // Fetch the dummy VTT file
+        fetch('/subtitles/dummy.vtt')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`Failed to fetch dummy VTT file: ${response.status} ${response.statusText}`);
+            }
+            return response.text();
+          })
+          .then(data => {
+            document.getElementById('dummyVttContent').textContent = data;
+          })
+          .catch(error => {
+            document.getElementById('dummyVttContent').textContent = `Error: ${error.message}`;
+          });
+      });
+    });
+  </script>
+</body>
+</html>
